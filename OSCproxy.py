@@ -3,12 +3,9 @@ import time
 import os
 import socket
 import numpy as np
+import types
 
 
-array = []
-current_output = 1.0
-count = 0
-not_count = 0
 
 UDP_IP = "127.0.0.1"
 UDP_PORT = 8200
@@ -22,23 +19,17 @@ s = OSC.OSCServer(addr)
 s.timeout = 0
 run = True
 
-loop_element = 0
-
+count = 0
 arg_buffer = np.empty((5, 10))
-
 
 def handle_timeout(self):
     self.timed_out = True
 
-import types
 s.handle_timeout = types.MethodType(handle_timeout, s)
 
 def response(path,tags, args, source):
     global arg_buffer
     global count
-    global not_count
-    global current_output
-
     if count >= 10:
         msg = OSC.OSCMessage()
         msg.setAddress("/wek/inputs")
